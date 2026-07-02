@@ -27,3 +27,15 @@ login = true
 ```
 
 Use `login = true` for tools that are only available after your shell profile loads (e.g. `mise`). Leave it `false` (or omit the file) for tools already on the default PATH (e.g. `docker`).
+
+
+## Install
+
+Download the latest release and rename it to the tool you want to shim:
+
+```powershell
+curl -Lo wsl-shim.exe https://github.com/<owner>/wsl-shim/releases/latest/download/wsl-shim-x86_64-pc-windows-msvc.exe
+mv wsl-shim.exe "$env:USERPROFILE\.local\bin\docker.exe"
+```
+
+Make sure `%USERPROFILE%\.local\bin` is on your `PATH`.

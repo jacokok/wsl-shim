@@ -1,7 +1,12 @@
-name: Build
+name: Build & Release
 
 on:
   workflow_dispatch:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -22,7 +27,26 @@ jobs:
 
       - run: cargo build --release --target ${{ matrix.target }}
 
+      - name: Rename binary
+        shell: pwsh
+        run: |
+          Copy-Item "target/${{ matrix.target }}/release/wsl-shim.exe" "wsl-shim-${{ matrix.target }}.exe"
+
       - uses: actions/upload-artifact@v4
         with:
           name: wsl-shim-${{ matrix.target }}
-          path: target/${{ matrix.target }}/release/wsl-shim.exe
+          path: wsl-shim-${{ matrix.target }}.exe
+
+  upload:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: "*.exe"
