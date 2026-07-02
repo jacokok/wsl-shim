@@ -34,7 +34,9 @@ Use `login = true` for tools that are only available after your shell profile lo
 Download the latest release and rename it to the tool you want to shim:
 
 ```powershell
-curl -Lo wsl-shim.exe https://github.com/<owner>/wsl-shim/releases/latest/download/wsl-shim-x86_64-pc-windows-msvc.exe
+# Download latest release
+curl -Lo wsl-shim.exe https://github.com/jacokok/wsl-shim/releases/latest/download/wsl-shim-x86_64-pc-windows-msvc.exe
+# Move to your local bin directory and rename to docker.exe or whatever tool you want to shim
 mv wsl-shim.exe "$env:USERPROFILE\.local\bin\docker.exe"
 ```
 
