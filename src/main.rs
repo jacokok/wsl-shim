@@ -47,14 +47,11 @@ fn main() -> ExitCode {
             let escaped = arg.replace('\'', "'\\''");
             shell_cmd.push_str(&format!(" '{}'", escaped));
         }
-        vec!["--".to_string(), "bash".to_string(), "-lc".to_string(), shell_cmd]
+        vec!["-e".to_string(), "bash".to_string(), "-lc".to_string(), shell_cmd]
     } else {
-        // Direct invocation, no shell overhead
-        let mut wsl_args: Vec<String> = vec!["--".to_string(), command];
-        for arg in &args {
-            let escaped = arg.replace('\'', "'\\''");
-            wsl_args.push(format!("'{}'", escaped));
-        }
+        // Direct exec, no shell interpretation
+        let mut wsl_args: Vec<String> = vec!["-e".to_string(), command];
+        wsl_args.extend(args);
         wsl_args
     };
 
